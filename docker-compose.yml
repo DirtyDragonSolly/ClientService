@@ -1,0 +1,27 @@
+version: '3'
+services:
+  client-service:
+    image: mcr.microsoft.com/dotnet/core/sdk:6.0
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./migrations:/db/migrations
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Endpoints__https__HttpsRedirection__ForbidRequestValidation=true
+    ports:
+      - "5000:80"
+      - "5001:443"
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=clientsdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
