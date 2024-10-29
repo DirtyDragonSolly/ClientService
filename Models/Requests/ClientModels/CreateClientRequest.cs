@@ -1,7 +1,7 @@
 ﻿using ClientService.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace ClientServise.Models.Requests
+namespace ClientService.Models.Requests.ClientModels
 {
     public class CreateClientRequest
     {

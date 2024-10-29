@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ClientServise.Models.Requests
+namespace ClientService.Models.Requests.FounderModels
 {
     public class CreateFounderRequest
     {

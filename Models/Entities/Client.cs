@@ -6,16 +6,19 @@ namespace ClientService.Models.Entities
     {
         public int Id { get; set; }
 
-        public string Inn { get; set; }
+        public required string Inn { get; set; }
 
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public ClientType Type { get; set; }
 
-        public List<Founder> Founders { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+
+        public IEnumerable<Founder> Founders { get; set; }
     }
 }

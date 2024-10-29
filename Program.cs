@@ -1,24 +1,10 @@
-using Microsoft.OpenApi.Models;
+using ClientService.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var webApplication = WebApplication
+    .CreateBuilder(args)
+    .ConfigureDIContainer()
+    .Build();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Client Service", Version = "v1" });
-});
+webApplication.ConfigureMiddlewares();
 
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Client Service V1"));
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+await webApplication.RunAsync();

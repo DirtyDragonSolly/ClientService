@@ -4,14 +4,19 @@
     {
         public int Id { get; set; }
 
-        public string Inn { get; set; }
+        public required string Inn { get; set; }
 
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
 
-        public Client Client { get; set; }
+        public int ClientId { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
+
+        public bool IsActive { get; set; }
+
+
+        public Client Client { get; set; }
     }
 }
