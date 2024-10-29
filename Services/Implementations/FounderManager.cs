@@ -33,19 +33,36 @@ namespace ClientService.Services.Implementations
 
         public async Task<int> CreateAsync(CreateFounderRequest founderRequest)
         {
-            var FounderEntity = new Founder
+            var client = await _db.Clients.FirstOrDefaultAsync(f => f.Id == founderRequest.ClientId);
+            
+            if (client == null)
             {
-                Client = await ValidateClientAsync(founderRequest.ClientId),
+                throw new Exception("Client doesn't exist");
+            }
+
+            if (!client.IsActive)
+            {
+                throw new Exception("Client not active");
+            }
+
+            if (client.Type == 0)
+            {
+                throw new Exception("Client type is not Legal Entity");
+            }
+
+            var founderEntity = new Founder
+            {
+                ClientId = client.Id,
                 Inn = founderRequest.Inn,
                 FullName = founderRequest.FullName,
                 CreatedAt = DateTime.UtcNow
             };
 
-            _db.Founders.Add(FounderEntity);
+            _db.Founders.Add(founderEntity);
 
             await _db.SaveChangesAsync();
 
-            return FounderEntity.Id;
+            return founderEntity.Id;
         }
 
         public async Task UpdateAsync(UpdateFounderRequest founderRequest)
@@ -90,27 +107,6 @@ namespace ClientService.Services.Implementations
             }            
 
             return founder;
-        }
-
-        private async Task<Client> ValidateClientAsync(int id)
-        {
-            var client = await _db.Clients.FirstOrDefaultAsync(f => f.Id == id);
-            if (client == null)
-            {
-                throw new Exception("Client doesn't exist");
-            }
-
-            if (!client.IsActive)
-            {
-                throw new Exception("Client not active");
-            }
-
-            if (client.Type == 0)
-            {
-                throw new Exception("Client type is not Legal Entity");
-            }
-
-            return client;
         }
     }
 }
