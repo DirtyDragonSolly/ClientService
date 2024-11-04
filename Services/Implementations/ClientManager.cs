@@ -12,12 +12,10 @@ namespace ClientServise.Services.Implementations
     public class ClientManager : IClientManager
     {
         private readonly ClientContext _db;
-        private readonly FounderManager _fm;
 
         public ClientManager(ClientContext db)
         {
             _db = db;
-            _fm = new FounderManager(_db);
         }
 
         public async Task<GetClientResponse> GetAsync(int id)
@@ -79,28 +77,17 @@ namespace ClientServise.Services.Implementations
         {
             await ValidateClientAsync(clientRequest.Id);
 
-            using var transaction = await _db.Database.BeginTransactionAsync();
-
-            try
-            {
-                await _db.Clients.Where(w => w.Id == clientRequest.Id)
-                    .ExecuteUpdateAsync(updates => updates
-                        .SetProperty(c => c.IsActive, false)
-                        .SetProperty(c => c.UpdatedAt, DateTime.UtcNow));
-
-                await _db.Founders.Where(f => f.ClientId == clientRequest.Id)
+            await _db.Founders.Where(f => f.ClientId == clientRequest.Id)
                     .ExecuteUpdateAsync(updates => updates
                         .SetProperty(f => f.IsActive, false)
                         .SetProperty(f => f.UpdatedAt, DateTime.UtcNow));
 
-                await transaction.CommitAsync();
-            }
-            catch (Exception ex) 
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-            
+            await _db.Clients.Where(w => w.Id == clientRequest.Id)
+                    .ExecuteUpdateAsync(updates => updates
+                        .SetProperty(c => c.IsActive, false)
+                        .SetProperty(c => c.UpdatedAt, DateTime.UtcNow));
+
+            await _db.SaveChangesAsync();
         }
 
         private async Task<Client> ValidateClientAsync(int id)

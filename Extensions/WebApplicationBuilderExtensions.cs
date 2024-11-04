@@ -1,4 +1,6 @@
 ﻿using ClientService.Data;
+using ClientService.Services.Implementations;
+using ClientService.Services.Interfaces;
 using ClientServise.Services.Implementations;
 using ClientServise.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ namespace ClientService.Extensions
         private static WebApplicationBuilder AddLogic(this WebApplicationBuilder applicationBuilder)
         {
             applicationBuilder.Services.AddScoped<IClientManager, ClientManager>();
+            applicationBuilder.Services.AddScoped<IFounderManager, FounderManager>();
 
             return applicationBuilder;
         }
