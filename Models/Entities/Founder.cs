@@ -14,7 +14,7 @@
 
         public DateTime? UpdatedAt { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
 
         public Client Client { get; set; }

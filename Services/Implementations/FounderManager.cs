@@ -79,8 +79,6 @@ namespace ClientService.Services.Implementations
                     .SetProperty(f => f.FullName, founderRequest.Name)
                     .SetProperty(f => f.Inn, founderRequest.Inn)
                     .SetProperty(f => f.UpdatedAt, DateTime.UtcNow));
-
-            await _db.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(DeleteFounderRequest founderRequest)
